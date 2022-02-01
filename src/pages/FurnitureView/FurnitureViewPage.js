@@ -1,11 +1,11 @@
 import React from 'react';
 import FurnitureViewTemplate from './FurnitureViewTemplate';
-import FurnitureViewForm from './FurnitureViewForm';
+import FurnitureViewFormContainer from '../../containers/FurnitureView/FurnitureViewFormContainer';
 
 const FurnitureViewPage = () => {
   return (
     <FurnitureViewTemplate>
-      <FurnitureViewForm />
+      <FurnitureViewFormContainer />
     </FurnitureViewTemplate>
   );
 };
