@@ -1,9 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const FurnitureFigure = ({ productId, discountRate, imageUrl }) => {
+const FurnitureFigure = ({
+  productId,
+  discountRate,
+  imageUrl,
+  checkCurrentProduct,
+}) => {
   return (
-    <ProductFigure className="productFigure" id={productId} imageUrl={imageUrl}>
+    <ProductFigure
+      className="productFigure"
+      id={productId}
+      imageUrl={imageUrl}
+      onClick={checkCurrentProduct}
+    >
       {discountRate !== 0 && (
         <DiscountBadge>
           {discountRate}
@@ -24,6 +34,7 @@ const ProductFigure = styled.figure`
   background-size: cover;
   border: 0.5px solid #aaafb9;
   border-radius: 16px;
+  cursor: pointer;
 `;
 
 const DiscountBadge = styled.div`

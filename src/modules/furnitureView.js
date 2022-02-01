@@ -7,6 +7,8 @@ import createRequestSaga, {
 import * as furnitureViewAPI from '../lib/api/furnitureView';
 
 const INITIALIZE_FORM = 'FURNITUREVIEW/INITIALIZE_FORM';
+const REGISTER_CURRENT_CHECKED_PRODUCT =
+  'FURNITUREVIEW/REGISTER_CURRENT_CHECKED_PRODUCT';
 
 const [
   FETCH_FURNITUREVIEW,
@@ -17,6 +19,11 @@ const [
 export const initializeForm = createAction(INITIALIZE_FORM);
 
 export const fetchFurnitureView = createAction(FETCH_FURNITUREVIEW);
+
+export const registerCurrentCheckedProduct = createAction(
+  REGISTER_CURRENT_CHECKED_PRODUCT,
+  productId => productId
+);
 
 const fetchFurnitureViewSaga = createRequestSaga(
   FETCH_FURNITUREVIEW,
@@ -34,6 +41,7 @@ const initialState = {
   },
   productList: [],
   furnitureViewError: null,
+  currentSelectedProductInfo: {},
 };
 
 const furnitureView = handleActions(
@@ -50,6 +58,12 @@ const furnitureView = handleActions(
       ...state,
       furnitureViewError: error,
     }),
+    [REGISTER_CURRENT_CHECKED_PRODUCT]: (state, { payload: productId }) =>
+      produce(state, draft => {
+        draft.currentSelectedProductInfo = state.productList.find(
+          product => product.productId === Number(productId)
+        );
+      }),
   },
   initialState
 );
