@@ -6,23 +6,25 @@ const FurnitureViewForm = ({
   roomInfo,
   productList,
   checkCurrentProduct,
-  checkCurrentProductInfo,
+  currentSelectedProductInfo,
 }) => {
   const { id, imageUrl } = roomInfo;
 
-  console.log(checkCurrentProductInfo);
   return (
     <Container>
       <CurrentRoomImageContainer>
         {productList.map(({ productId, pointX, pointY }, index) => {
-          // return <img className="tagSearch" alt="tagSearch" src="./images/icon-tag_search.png" />
           return (
             <TagButton key={index} pointX={pointX} pointY={pointY}>
               <img
                 id={productId}
                 className="tagImage"
                 alt="tagImage"
-                src="./images/icon-tag_delete.png"
+                src={`${
+                  currentSelectedProductInfo.productId === productId
+                    ? './images/icon-tag_delete.png'
+                    : './images/icon-tag_search.png'
+                }`}
                 onClick={checkCurrentProduct}
               />
             </TagButton>
@@ -39,6 +41,7 @@ const FurnitureViewForm = ({
               discountRate={discountRate}
               imageUrl={imageUrl}
               checkCurrentProduct={checkCurrentProduct}
+              currentSelectedProductInfo={currentSelectedProductInfo}
             />
           );
         })}
@@ -78,6 +81,7 @@ const FurnitureViewContainer = styled.div`
   align-items: center;
   margin-top: 28px;
   padding: 0 10px;
+  overflow: scroll;
 `;
 
 export default FurnitureViewForm;

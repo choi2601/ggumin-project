@@ -31,7 +31,7 @@ const FurnitureViewFormContainer = () => {
       dispatch(fetchFurnitureView());
     });
   }, [dispatch]);
-  console.log(currentSelectedProductInfo);
+
   return (
     <FurnitureViewForm
       roomInfo={roomInfo}
