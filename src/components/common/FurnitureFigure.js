@@ -9,7 +9,6 @@ const FurnitureFigure = ({
   checkCurrentProduct,
   currentSelectedProductInfo,
 }) => {
-  console.log(productId, currentSelectedProductInfo.productId);
   return (
     <Container active={productId === currentSelectedProductInfo.productId}>
       <ProductFigure

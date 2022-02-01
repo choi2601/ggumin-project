@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import FurnitureFigure from '../../components/common/FurnitureFigure';
+import Tooltip from '../../components/common/Tooltip';
 
 const FurnitureViewForm = ({
   roomInfo,
@@ -27,6 +28,11 @@ const FurnitureViewForm = ({
                 }`}
                 onClick={checkCurrentProduct}
               />
+              {productId === currentSelectedProductInfo.productId && (
+                <Tooltip
+                  currentSelectedProductInfo={currentSelectedProductInfo}
+                />
+              )}
             </TagButton>
           );
         })}
