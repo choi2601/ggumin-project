@@ -1,9 +1,45 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-const Tooltip = ({ currentSelectedProductInfo }) => {
+const Tooltip = ({ currentRoomViewSize, currentSelectedProductInfo }) => {
+  const [currentTooltipWidth, setCurrentTooltipWidth] = useState(0);
+  const currentTooltip = useRef(null);
+
+  const isSideImage = () => {
+    const { pointY } = currentSelectedProductInfo;
+
+    const addCurrentTooltipWidthToPointY =
+      currentTooltipWidth + (pointY + pointY * 0.62);
+
+    if (addCurrentTooltipWidthToPointY >= currentRoomViewSize.width)
+      return true;
+    else return false;
+  };
+
+  const isBottomImage = () => {
+    const { pointX } = currentSelectedProductInfo;
+
+    const currentRoomViewHalfHeight = parseFloat(
+      currentRoomViewSize.height / 2
+    );
+
+    const ratioPointX = pointX + pointX * 0.6;
+
+    if (ratioPointX > currentRoomViewHalfHeight) return true;
+    else return false;
+  };
+
+  useLayoutEffect(() => {
+    const toolTipWidth = currentTooltip.current.getBoundingClientRect().width;
+    setCurrentTooltipWidth(toolTipWidth);
+  }, [currentRoomViewSize]);
+
   return (
-    <Container>
+    <Container
+      ref={currentTooltip}
+      bottomImage={isBottomImage()}
+      sideImage={isSideImage()}
+    >
       <ProductThumbnail imageUrl={currentSelectedProductInfo.imageUrl} />
       <ProductSubInfo>
         <div className="productName">
@@ -28,13 +64,14 @@ const Tooltip = ({ currentSelectedProductInfo }) => {
     </Container>
   );
 };
-
+//left, top
 const Container = styled.span`
   display: flex;
   position: absolute;
-  top: unset;
-  bottom: 52px;
-  left: -160px;
+  top: ${({ bottomImage }) => (bottomImage ? 'unset' : '28px')};
+  bottom: ${({ bottomImage }) => bottomImage && '52px'};
+  left: ${({ bottomImage, sideImage }) =>
+    bottomImage || sideImage ? '-160px' : '-20px'};
   background-color: rgba(255, 255, 255, 0.95);
   width: 220px;
   height: 86px;
@@ -49,11 +86,13 @@ const Container = styled.span`
   &::before {
     content: '';
     position: absolute;
-    top: unset;
-    right: 34px;
-    bottom: -8px;
-    left: unset;
-    transform: rotate(180deg);
+    top: ${({ bottomImage }) => (bottomImage ? 'unset' : '-8px')};
+    right: ${({ bottomImage, sideImage }) =>
+      (bottomImage || sideImage) && '34px'};
+    bottom: ${({ bottomImage }) => bottomImage && '-8px'};
+    left: ${({ bottomImage, sideImage }) =>
+      bottomImage || sideImage ? 'unset' : '34px'};
+    transform: ${({ bottomImage }) => bottomImage && 'rotate(180deg)'};
     width: 12px;
     height: 8px;
     background: url(./images/icon-triangle.png) no-repeat;

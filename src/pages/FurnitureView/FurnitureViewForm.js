@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
 import FurnitureFigure from '../../components/common/FurnitureFigure';
 import Tooltip from '../../components/common/Tooltip';
@@ -9,7 +9,24 @@ const FurnitureViewForm = ({
   checkCurrentProduct,
   currentSelectedProductInfo,
 }) => {
+  const [currentRoomViewSize, setCurrentRoomViewSize] = useState({
+    width: 0,
+    height: 0,
+  });
+  const roomView = useRef(null);
+
   const { id, imageUrl } = roomInfo;
+
+  useLayoutEffect(() => {
+    const roomViewWidth = roomView.current.width;
+    const roomViewHeight = roomView.current.height;
+
+    setCurrentRoomViewSize({
+      ...currentRoomViewSize,
+      width: roomViewWidth,
+      height: roomViewHeight,
+    });
+  }, [imageUrl]);
 
   return (
     <Container>
@@ -30,13 +47,21 @@ const FurnitureViewForm = ({
               />
               {productId === currentSelectedProductInfo.productId && (
                 <Tooltip
+                  currentRoomViewSize={currentRoomViewSize}
                   currentSelectedProductInfo={currentSelectedProductInfo}
                 />
               )}
             </TagButton>
           );
         })}
-        <img className="roomImage" id={id} alt="roomImage" src={imageUrl} />
+        <img
+          className="roomImage"
+          id={id}
+          alt="roomImage"
+          src={imageUrl}
+          ref={roomView}
+          style={{ height: '998px' }}
+        />
       </CurrentRoomImageContainer>
       <FurnitureViewContainer>
         {productList.map(({ productId, discountRate, imageUrl }, index) => {
@@ -63,9 +88,6 @@ const Container = styled.div`
 
 const CurrentRoomImageContainer = styled.div`
   position: relative;
-  & .roomImage {
-    width: 800px;
-  }
 `;
 
 const TagButton = styled.div`
