@@ -1,10 +1,10 @@
-import { check } from 'prettier';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector, batch } from 'react-redux';
 import {
   fetchFurnitureView,
   initializeForm,
   registerCurrentCheckedProduct,
+  deleteCurrentCheckedProduct,
 } from '../../modules/furnitureView';
 import FurnitureViewForm from '../../pages/FurnitureView/FurnitureViewForm';
 
@@ -22,7 +22,12 @@ const FurnitureViewFormContainer = () => {
   const checkCurrentProduct = event => {
     const productId = event.target.id;
 
-    dispatch(registerCurrentCheckedProduct(productId));
+    if (currentSelectedProductInfo.productId) {
+      dispatch(deleteCurrentCheckedProduct());
+
+      if (currentSelectedProductInfo.productId !== Number(productId))
+        dispatch(registerCurrentCheckedProduct(productId));
+    } else dispatch(registerCurrentCheckedProduct(productId));
   };
 
   useEffect(() => {

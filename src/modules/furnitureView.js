@@ -7,8 +7,12 @@ import createRequestSaga, {
 import * as furnitureViewAPI from '../lib/api/furnitureView';
 
 const INITIALIZE_FORM = 'FURNITUREVIEW/INITIALIZE_FORM';
+
 const REGISTER_CURRENT_CHECKED_PRODUCT =
   'FURNITUREVIEW/REGISTER_CURRENT_CHECKED_PRODUCT';
+
+const DELETE_CURRENT_CHECKED_PRODUCT =
+  'FURNITUREVIEW/DELETE_CURRENT_CHECKED_PRODUCT';
 
 const [
   FETCH_FURNITUREVIEW,
@@ -23,6 +27,10 @@ export const fetchFurnitureView = createAction(FETCH_FURNITUREVIEW);
 export const registerCurrentCheckedProduct = createAction(
   REGISTER_CURRENT_CHECKED_PRODUCT,
   productId => productId
+);
+
+export const deleteCurrentCheckedProduct = createAction(
+  DELETE_CURRENT_CHECKED_PRODUCT
 );
 
 const fetchFurnitureViewSaga = createRequestSaga(
@@ -64,6 +72,10 @@ const furnitureView = handleActions(
           product => product.productId === Number(productId)
         );
       }),
+    [DELETE_CURRENT_CHECKED_PRODUCT]: state => ({
+      ...state,
+      currentSelectedProductInfo: {},
+    }),
   },
   initialState
 );
