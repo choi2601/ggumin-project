@@ -64,7 +64,7 @@ const Tooltip = ({ currentRoomViewSize, currentSelectedProductInfo }) => {
     </Container>
   );
 };
-//left, top
+
 const Container = styled.span`
   display: flex;
   position: absolute;

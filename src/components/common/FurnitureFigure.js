@@ -1,4 +1,3 @@
-import produce from 'immer';
 import React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -33,7 +32,7 @@ const Container = styled.div`
   justify-content: center;
   width: fit-content;
   height: fit-content;
-  margin: 0 6px;
+  margin: 28px 6px;
 
   ${({ active }) =>
     active &&
