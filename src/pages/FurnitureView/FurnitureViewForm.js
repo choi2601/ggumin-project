@@ -1,7 +1,8 @@
-import React, { useState, useLayoutEffect, useRef } from 'react';
-import styled from 'styled-components';
+import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
+import styled, { css } from 'styled-components';
 import FurnitureFigure from '../../components/common/FurnitureFigure';
 import Tooltip from '../../components/common/Tooltip';
+import useSwiper from '../../hooks/useSwiper';
 
 const FurnitureViewForm = ({
   roomInfo,
@@ -13,6 +14,17 @@ const FurnitureViewForm = ({
     width: 0,
     height: 0,
   });
+  const {
+    mouseUpClientX,
+    currentSlideRef,
+    isScrollMode,
+    setMousePos,
+    setMouseMove,
+    setCurrentSwipeInfo,
+    setCurrentScrollInfo,
+    setMoveToCurrentSelectedProduct,
+  } = useSwiper();
+
   const roomView = useRef(null);
 
   const { id, imageUrl } = roomInfo;
@@ -27,6 +39,18 @@ const FurnitureViewForm = ({
       height: roomViewHeight,
     });
   }, [imageUrl]);
+
+  useLayoutEffect(() => {
+    mouseUpClientX && setCurrentSwipeInfo();
+  }, [mouseUpClientX]);
+
+  useLayoutEffect(() => {
+    currentSelectedProductInfo &&
+      setMoveToCurrentSelectedProduct(
+        productList,
+        currentSelectedProductInfo.productId
+      );
+  }, [currentSelectedProductInfo]);
 
   return (
     <Container>
@@ -63,19 +87,28 @@ const FurnitureViewForm = ({
           style={{ height: '998px' }}
         />
       </CurrentRoomImageContainer>
-      <FurnitureViewContainer>
-        {productList.map(({ productId, discountRate, imageUrl }, index) => {
-          return (
-            <FurnitureFigure
-              key={index}
-              productId={productId}
-              discountRate={discountRate}
-              imageUrl={imageUrl}
-              checkCurrentProduct={checkCurrentProduct}
-              currentSelectedProductInfo={currentSelectedProductInfo}
-            />
-          );
-        })}
+      <FurnitureViewContainer
+        onMouseDown={setMousePos}
+        onMouseUp={setMousePos}
+        onMouseMove={setMouseMove}
+        onWheel={setCurrentScrollInfo}
+        ref={currentSlideRef}
+        isScrollMode={isScrollMode}
+      >
+        <SlideWrapper>
+          {productList.map(({ productId, discountRate, imageUrl }, index) => {
+            return (
+              <FurnitureFigure
+                key={index}
+                productId={productId}
+                discountRate={discountRate}
+                imageUrl={imageUrl}
+                checkCurrentProduct={checkCurrentProduct}
+                currentSelectedProductInfo={currentSelectedProductInfo}
+              />
+            );
+          })}
+        </SlideWrapper>
       </FurnitureViewContainer>
     </Container>
   );
@@ -107,9 +140,23 @@ const TagButton = styled.div`
 const FurnitureViewContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 28px;
+  overflow: auto;
+  scroll-behavior: smooth;
+  transition: transform 0.6s ease-out;
+
+  ${({ isScrollMode }) =>
+    !isScrollMode &&
+    css`
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    `}
+`;
+
+const SlideWrapper = styled.div`
+  display: flex;
+  align-items: center;
   padding: 0 10px;
-  overflow: scroll;
 `;
 
 export default FurnitureViewForm;
