@@ -4,6 +4,9 @@
 
 > <u>[과제 링크](http://gguminproject.s3-website.ap-northeast-2.amazonaws.com/)
 
+## 🎥 구현 영상
+![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/65222200/152277514-d3575701-beed-40d8-892f-4fd56653c280.gif)
+
 ## 👫 팀원
 
 - Front-end: 최병현
